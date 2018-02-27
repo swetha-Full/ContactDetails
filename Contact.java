@@ -31,7 +31,12 @@ public String getName()
 }
 public void setName(String name)
 {
+	if(name.equals(null))
+	{
+		System.out.println("Invalid name has been entered.");
+	}
 	this.name=name;
+	
 }
 
 }

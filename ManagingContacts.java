@@ -1,7 +1,10 @@
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ManagingContacts {
+
 	ArrayList<Contact> list = new ArrayList<Contact>();
 	String addMore = "n";
 	String viewMore = "n";
@@ -10,19 +13,39 @@ public class ManagingContacts {
 	String moreModify="n";
 	Contact cd = new Contact();
 	public void addContact() {
+		Pattern namePattern=Pattern.compile("[A-Z]*[a-z]+[ \t\r\n][A-Z]*[a-z]+");
+		Pattern mobileNumberPattern=Pattern.compile("[987]{1}[0-9]{9}");
+		Pattern mailPattern=Pattern.compile("[A-Z]*[a-z]+[0-9]*[_]*[a-z]*@[a-z]+.[a-z]{2,5}");
 		do {Scanner sc = new Scanner(System.in);
 			System.out.println("Welcome to Adding Contact Details:");
 			System.out.println("Enter the name:");
-			String name = sc.next();
+			String name = sc.nextLine();
+			Matcher namematcher=namePattern.matcher(name);
+			boolean nameMatches=namematcher.matches();
 			System.out.println("Enter the mobile Number:");
-			long mobileNumber = sc.nextLong();
+			long mobileNumber=sc.nextLong();
+			String numstring=String.valueOf(mobileNumber);
+			Matcher mobileNumbermatcher=mobileNumberPattern.matcher(numstring);
+			boolean numMatches=mobileNumbermatcher.matches();
 			System.out.println("Enter the mailID:");
 			String mailID = sc.next();
-			Contact c1 = new Contact(name, mobileNumber, mailID);
-			list.add(c1);
-			System.out.println(name + " has been Added to contact list");
+			Matcher mailmatcher=mailPattern.matcher(mailID);
+			boolean mailMatches=mailmatcher.matches();
+			if(nameMatches && mailMatches && numMatches)
+			{
+				Contact contact = new Contact(name, mobileNumber, mailID);
+				list.add(contact);
+				System.out.println(name + " has been Added to contact list");
+			}
+			else
+			{
+				System.out.println("Any value you have entered doesnot support the pattern that has been defined.");
+			}
+			
+			
 			System.out.println("Do you want to add more contacts:");
 			addMore = sc.next();
+			
 		} while (addMore.equals("y"));
 	}
 	public void retrieveContact()
@@ -35,7 +58,7 @@ public class ManagingContacts {
 			
 			else {
 				System.out.println("Enter the Name to view phone number:");
-				String inputName = sc.next();
+				String inputName = sc.nextLine();
 				for (Contact c1 : list) {
 					if (c1.name.equals(inputName))
 						System.out.println(c1.name + " " + c1.mobileNumber + " " + c1.mailID);
@@ -121,6 +144,7 @@ do
 		 pos=list.indexOf(cd1);
 		}
 	}
+	
 	
 	list.remove(pos);
 	for(Contact cd3:list)
