@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ManagingContacts {
-
+	static	int i=1;
 	ArrayList<Contact> list = new ArrayList<Contact>();
 	String addMore = "n";
 	String viewMore = "n";
@@ -12,118 +12,127 @@ public class ManagingContacts {
 	String deleteMore="n";
 	String moreModify="n";
 	Contact cd = new Contact();
+	
 	public void addContact() {
-		Pattern namePattern=Pattern.compile("[A-Z]*[a-z]+[ \t\r\n][A-Z]*[a-z]+");
-		Pattern mobileNumberPattern=Pattern.compile("[987]{1}[0-9]{9}");
-		Pattern mailPattern=Pattern.compile("[A-Z]*[a-z]+[0-9]*[_]*[a-z]*@[a-z]+.[a-z]{2,5}");
+	
 		do {Scanner sc = new Scanner(System.in);
 			System.out.println("Welcome to Adding Contact Details:");
 			System.out.println("Enter the name:");
 			String name = sc.nextLine();
-			Matcher namematcher=namePattern.matcher(name);
-			boolean nameMatches=namematcher.matches();
+			
 			System.out.println("Enter the mobile Number:");
 			long mobileNumber=sc.nextLong();
-			String numstring=String.valueOf(mobileNumber);
-			Matcher mobileNumbermatcher=mobileNumberPattern.matcher(numstring);
-			boolean numMatches=mobileNumbermatcher.matches();
+			
 			System.out.println("Enter the mailID:");
 			String mailID = sc.next();
-			Matcher mailmatcher=mailPattern.matcher(mailID);
-			boolean mailMatches=mailmatcher.matches();
-			if(nameMatches && mailMatches && numMatches)
-			{
+			
 				Contact contact = new Contact(name, mobileNumber, mailID);
 				list.add(contact);
 				System.out.println(name + " has been Added to contact list");
-			}
-			else
-			{
-				System.out.println("Any value you have entered doesnot support the pattern that has been defined.");
-			}
+			
 			
 			
 			System.out.println("Do you want to add more contacts:");
 			addMore = sc.next();
 			
 		} while (addMore.equals("y"));
+		
 	}
 	public void retrieveContact()
 	{Scanner sc = new Scanner(System.in);
+	ArrayList<Contact> matchedContact=new ArrayList<Contact>();
 		do {
-			if (list.isEmpty()) {
-				System.out.println("No Contact has been Added, Please added then View");
-				break;
-			}
 			
-			else {
 				System.out.println("Enter the Name to view phone number:");
 				String inputName = sc.nextLine();
-				for (Contact c1 : list) {
+					for (Contact c1 : list) {
 					if (c1.name.equals(inputName))
-						System.out.println(c1.name + " " + c1.mobileNumber + " " + c1.mailID);
-					else
-						System.out.println("Search Unsuccessful");
-				}
-
-				System.out.println("Do you want to view more contacts:");
-				viewMore = sc.next();
+					{
+						matchedContact.add(c1);
+					}
+					}
+		if(matchedContact.isEmpty())
+		{
+			System.out.println("NO Such contact was found ");
+		}
+		else
+		{
+			for(Contact c10:matchedContact)
+			{
+				System.out.println(c10.name+" "+c10.mobileNumber+" "+c10.mailID);
 			}
-
-		} while (viewMore.equals("y"));
+		}
+				System.out.println("Do you want to view more contacts:");
+			viewMore = sc.next();
+			} while (viewMore.equals("y"));
 	}
 public void modifyContact()
 {Scanner sc = new Scanner(System.in);
 	do {
 		System.out.println("Enter the name to be modified");
 		String input=sc.next();
-				Iterator i=list.iterator();
-				while(i.hasNext())
+		ArrayList<Contact> matchedContact=new ArrayList<Contact>();
+		for (Contact c1 : list) {
+			if (c1.name.equals(input))
+			{ 
+			
+				matchedContact.add(c1);
+			    
+			}
+			else if(matchedContact.isEmpty())
+			{
+				System.out.println(input+" is not found");
+			}
+			
+			}
+	
+		for(Contact c:matchedContact)
+		{ 
+			System.out.println(matchedContact.indexOf(c)+" "+c.name+" "+c.mobileNumber);
+		}
+		System.out.println("Enter which "+input+" to modify");
+		int  modifyChoice=sc.nextInt();
+		
+		for(Contact c1:matchedContact)
+		{
+			if(matchedContact.indexOf(c1)==modifyChoice)
+			{
+				System.out.println("Enter what you want to modify(name or number):");
+				String edittingChoice = sc.next();
+				switch (edittingChoice) 
 				{
-					Contact c=(Contact)i.next();
-					if(c.name.equals(input))
-					{
-						System.out.println("Enter what you want to modify:");
-						System.out.println("Press 1 if you want to edit name");
-						System.out.println("Press 2 if you want to edit mobile number:");
-						System.out.println("Press 3 if you want to edit the mailID");
-						Scanner sc1 = new Scanner(System.in);
-						String edittingChoice = sc1.next();
-						switch (edittingChoice) 
-						{
-						case "name":
-							System.out.println("Enter your new name");
-							String newName = sc1.next();
-							c.setName(newName);
-							
-							System.out.println(c.name + " " + c.mailID + " " + c.mobileNumber);
-							break;
-						case "number":
-							System.out.println("Enter the new mobile number");
-							long newMobNumber=sc1.nextLong();
-							c.setMobileNumber(newMobNumber);
-							System.out.println(c.name+" "+c.mobileNumber+" "+c.mailID);
-							break;
-						case "mail":
-							System.out.println("Enter the new mailID");
-							String newMailId=sc1.next();
-							c.setMailID(newMailId);
-							System.out.println(c.name+" "+c.mobileNumber+" "+c.mailID);
-							break;
-						default:
-							System.out.println("Choice Entered is Invalid");
-							break;
-					}
+				case "name":
+					System.out.println("Enter your new name");
+					String newName = sc.next();
+				c1.setName(newName);
+					
+					System.out.println(c1.name+" "+c1.mobileNumber);
+					break;
+				case "number":
+					System.out.println("Enter the new mobile number");
+					long newMobNumber=sc.nextLong();
+					c1.setMobileNumber(newMobNumber);
+					System.out.println(c1.name+" "+c1.mobileNumber);
+					break;
+				default:
+					System.out.println("Choice Entered is Invalid");
+					break;
+					
+			}
+		}
+		
 				}
-				}
+	
 		System.out.println("Do you want to make more modifications");
 		moreModify=sc.next();
 	
 } while (moreModify.equals("y"));
 }
+
+
 public void deleteContact()
-{Scanner sc = new Scanner(System.in);
-int pos=0;
+{ 
+	Scanner sc = new Scanner(System.in);
 if(list.isEmpty())
 {
 	System.out.println("Nothing to be deleted as list is empty");
@@ -135,11 +144,33 @@ do
 	
 	System.out.println("Enter a name that you want to delete:");
 	String deleteInfo=sc.next();
-	Iterator<Contact> i=list.iterator();
+	ArrayList<Contact> matchedContact=new ArrayList<Contact>();
+	for (Contact c1 : list) {
+		if (c1.name.equals(deleteInfo))
+		{ 
+		
+			matchedContact.add(c1);
+		    System.out.println(matchedContact.indexOf(c1)+" "+c1.name+" "+c1.mobileNumber);
+		}
+		else if(matchedContact.isEmpty())
+		{
+			System.out.println(deleteInfo+" is not found");
+		}
+		
+		}
+	System.out.println("Enter which "+deleteInfo+" you want to delete");
+	int index=sc.nextInt();
+	cd.remove(list,matchedContact.get(index));
+	for(Contact c:list)
+	{
+		System.out.println(c.name+" "+c.mobileNumber);
+	}
+/*	
+	Iterator<Contact> i=matchedContact.iterator();
 	while(i.hasNext())
 	{
 		Contact cd1=(Contact)i.next();
-		if(cd1.name.equals(deleteInfo))
+		if(matchedContact.indexOf(cd1)==index)
 		{
 		 pos=list.indexOf(cd1);
 		}
@@ -151,7 +182,7 @@ do
 	{
 		System.out.println(cd3.name+" "+cd3.mobileNumber+" "+cd3.mailID);
 	}
-	
+	*/
 	System.out.println("Do you want to delete more:");
 	deleteMore=sc.next();
 }while(deleteMore.equals("y"));

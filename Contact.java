@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Contact {
 public String name;
@@ -6,6 +7,10 @@ String mailID;
 Contact()
 {
 	
+}ArrayList<Contact> list=new ArrayList<Contact>();
+public void remove(ArrayList a,Contact contact)
+{
+	a.remove(contact);
 }
 Contact(String name,long mobileNumber,String mailID)
 {
@@ -39,4 +44,8 @@ public void setName(String name)
 	
 }
 
+public String toString()
+{
+	return name+" "+mobileNumber;
+}
 }
